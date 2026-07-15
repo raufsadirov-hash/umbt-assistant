@@ -131,6 +131,15 @@ async def get_email(message: Message, state: FSMContext):
 
 
 async def main():
+    print("==========")
+    print("БОТ ЗАПУСКАЕТСЯ")
+
+    me = await bot.get_me()
+
+    print(f"Бот: @{me.username}")
+
+    print("Запускаю polling...")
+
     await dp.start_polling(bot)
 
 
