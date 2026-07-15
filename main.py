@@ -1,4 +1,7 @@
 import asyncio
+import os
+from threading import Thread
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart
@@ -9,6 +12,25 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from config import BOT_TOKEN
 from google_sheets import save_user
+
+
+# ----- НУЖНО ДЛЯ RENDER -----
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Bot is running")
+
+
+def run_server():
+    port = int(os.environ.get("PORT", 10000))
+    server = HTTPServer(("0.0.0.0", port), Handler)
+    server.serve_forever()
+
+
+Thread(target=run_server, daemon=True).start()
+# ----------------------------
+
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
